@@ -10,6 +10,7 @@ dotenv.config({ path: './config/config.env' });
 connectDb();
 
 const app = express();
+app.use(express.json());
 
 app.use('/api/v1/naturalPersons', naturalPersons);
 app.use('/api/v1/relations', relations);
