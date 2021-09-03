@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDb = require('./config/db');
+const errorHandler = require('./middleware/errorHandler');
 
 const naturalPersons = require('./routes/naturalPersons');
 const relations = require('./routes/relations');
@@ -14,6 +15,8 @@ app.use(express.json());
 
 app.use('/api/v1/naturalPersons', naturalPersons);
 app.use('/api/v1/relations', relations);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV;

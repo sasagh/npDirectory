@@ -1,30 +1,34 @@
-const NaturalPerson = require('../models/NaturalPerson')
+const NaturalPerson = require('../models/NaturalPerson');
+const asyncHandler = require('../middleware/asyncHandler');
+const StatusCode = require('../common/constants/StatusCode');
+const ErrorMessage = require('../common/messages/ErrorMessage');
+const ErrorResponse = require('../common/utils/ErrorResponse');
+const OkResponse = require('../common/utils/OkResponse');
 
-exports.getNaturalPersons = async (req, res, next) => {
+const NATURAL_PERSON = 'Natural person';
+
+exports.getNaturalPersons = asyncHandler(async (req, res, next) => {
     const naturalPersons = await NaturalPerson.find();
 
-    if(naturalPersons.length > 0){
-        res.status(200).json({ success: true, size: naturalPersons.length, data: naturalPersons });
-    } else {
-        res.status(404).json({ success: false });
-    }
-}
+    res.status(StatusCode.SUCCESS).json(new OkResponse(naturalPersons));
+});
 
-exports.createNaturalPerson = async (req, res, next) => {
+exports.createNaturalPerson = asyncHandler(async (req, res, next) => {
     const naturalPerson = await NaturalPerson.create(req.body);
 
-    res.status(201).json({ data: naturalPerson });
-}
+    res.status(StatusCode.CREATE).json(new OkResponse(naturalPerson));
+});
 
-exports.getNaturalPersonById = async (req, res, next) => {
-    const naturalPerson = await NaturalPerson.findById(req.params.id);
+exports.getNaturalPersonById = asyncHandler(async (req, res, next) => {
+    const id = req.params.id;
+    const naturalPerson = await NaturalPerson.findById(id);
 
-    if(naturalPerson){
-        res.status(200).json({ success: true, data: naturalPerson });
-    } else {
-        res.status(404).json({ success: false });
+    if(!naturalPerson){
+        return next(new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id), StatusCode.NOT_FOUND));
     }
-}
+    
+    res.status(200).json(new OkResponse(naturalPerson));
+});
 
 exports.updateNaturalPerson = async (req, res, next) => {
     const naturalPerson = await NaturalPerson.findByIdAndUpdate(req.params.id, req.body, {
@@ -32,20 +36,20 @@ exports.updateNaturalPerson = async (req, res, next) => {
         runValidators: true
     });
 
-    if(naturalPerson){
-        res.status(200).json({ success: true, data: naturalPerson });
-    } else {
-        res.status(404).json({ success: false });
+    if(!naturalPerson){
+        return next(new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id), StatusCode.NOT_FOUND));
     }
+
+    res.status(200).json(new OkResponse(naturalPerson));
 }
 
 exports.deleteNaturalPerson = async (req, res, next) => {
     const naturalPerson = await NaturalPerson.findByIdAndDelete(req.params.id);
 
-    if(naturalPerson){
-        res.status(200).json({ success: true, data: {} });
-    } else {
-        res.status(404).json({ success: false });
+    if(!naturalPerson){
+        return next(new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id), StatusCode.NOT_FOUND));
     }
+
+    res.status(200).json(new OkResponse(naturalPerson));
 }
 

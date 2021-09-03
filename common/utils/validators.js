@@ -1,6 +1,6 @@
-const Language = require('../constants/language');
-const Gender = require('../constants/gender');
-const RegularExpression = require('../constants/regularExpression');
+const Language = require('../constants/Language');
+const Gender = require('../constants/Gender');
+const RegularExpression = require('../constants/RegularExpression');
 
 exports.validateName = (str) => {
     if(!str || containsDigit(str))

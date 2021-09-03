@@ -5,7 +5,8 @@ const {
     createRelation,
     getRelationById,
     updateRelation,
-    deleteRelation } = require('../controllers/relations');
+    deleteRelation
+} = require('../controllers/relations');
 
 router
     .route('/')
