@@ -1,5 +1,6 @@
 const Language = require('../constants/Language');
 const Gender = require('../constants/Gender');
+const RelationType = require('../constants/RelationType');
 const RegularExpression = require('../constants/RegularExpression');
 
 exports.validateName = (str) => {
@@ -30,7 +31,7 @@ exports.validateName = (str) => {
     return true;
 }
 
-exports.validateGender = (gender) => Object.values(Gender).includes(gender.toUpperCase())
+exports.validateGender = (gender) => Object.values(Gender).includes(gender.toUpperCase());
 
 exports.validatePassportNumber = (str) => RegularExpression.passportNumber.test(str);
 
@@ -54,6 +55,8 @@ exports.validateContactInformation = (contactInformation) => {
 
     return true;
 }
+
+exports.validateRelationType = (relationType) => Object.values(RelationType).includes(relationType.toUpperCase());
 
 isGeorgianCharacter = (c) => c >= 'ა' && c <= 'ჰ';
 
