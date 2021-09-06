@@ -10,6 +10,9 @@ const GlobalConstants = {
     CONTACT_INFORMATION_STRING: 'contactInformation',
     IMAGE_STRING: 'image',
     IMAGE_FILE_NAME_STRING: 'imageFileName',
+    FROM_STRING: 'from',
+    TO_STRING: 'to',
+    RELATION_TYPE_STRING: 'relationType',
 }
 
 Object.freeze(GlobalConstants);
