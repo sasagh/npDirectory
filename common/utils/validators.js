@@ -1,7 +1,8 @@
-const Language = require('../constants/Language');
-const Gender = require('../constants/Gender');
-const RelationType = require('../constants/RelationType');
-const RegularExpression = require('../constants/RegularExpression');
+const Language = require('../enum/Language');
+const Gender = require('../enum/Gender');
+const RelationType = require('../enum/RelationType');
+const ImageType = require('../enum/ImageType');
+const RegexPattern = require('../enum/RegexPattern');
 
 exports.validateName = (str) => {
     if(!str || containsDigit(str))
@@ -33,7 +34,7 @@ exports.validateName = (str) => {
 
 exports.validateGender = (gender) => Object.values(Gender).includes(gender.toUpperCase());
 
-exports.validatePassportNumber = (str) => RegularExpression.passportNumber.test(str);
+exports.validatePassportNumber = (str) => RegexPattern.PASSPORT_NUMBER.test(str);
 
 exports.validateDate = (date) => {
     date = new Date(date);
@@ -45,9 +46,12 @@ exports.validateDate = (date) => {
 }
 
 exports.validateContactInformation = (contactInformation) => {
+    if(!contactInformation)
+        return false;
+        
     for(const information of contactInformation){
-        const isEmail = RegularExpression.email.test(information);
-        const isPhoneNumber = RegularExpression.phoneNumber.test(information);
+        const isEmail = RegexPattern.EMAIL.test(information);
+        const isPhoneNumber = RegexPattern.PHONE_NUMBER.test(information);
 
         if(!isEmail && !isPhoneNumber)
             return false;
@@ -57,6 +61,15 @@ exports.validateContactInformation = (contactInformation) => {
 }
 
 exports.validateRelationType = (relationType) => Object.values(RelationType).includes(relationType.toUpperCase());
+
+exports.validateImage = (file) => {
+    if(!file)
+        return false
+
+    const fileType = file['type'];
+
+    return Object.values(ImageType).includes(fileType);
+}
 
 isGeorgianCharacter = (c) => c >= 'ა' && c <= 'ჰ';
 

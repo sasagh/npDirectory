@@ -1,6 +1,6 @@
 const NaturalPerson = require('../models/NaturalPerson');
 const asyncHandler = require('../middleware/asyncHandler');
-const StatusCode = require('../common/constants/StatusCode');
+const StatusCode = require('../common/enum/StatusCode');
 const ErrorMessage = require('../common/messages/ErrorMessage');
 const ErrorResponse = require('../common/utils/ErrorResponse');
 const OkResponse = require('../common/utils/OkResponse');
@@ -24,7 +24,9 @@ exports.getNaturalPersonById = asyncHandler(async (req, res, next) => {
     const naturalPerson = await NaturalPerson.findById(id);
 
     if(!naturalPerson){
-        return next(new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id), StatusCode.NOT_FOUND));
+        //TODO same code on different places. extract notFoundResult method
+        const response = new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id));
+        return res.status(StatusCode.NOT_FOUND).json(response);
     }
     
     res.status(200).json(new OkResponse(naturalPerson));
@@ -37,7 +39,8 @@ exports.updateNaturalPerson = async (req, res, next) => {
     });
 
     if(!naturalPerson){
-        return next(new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id), StatusCode.NOT_FOUND));
+        const response = new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id));
+        return res.status(StatusCode.NOT_FOUND).json(response);
     }
 
     res.status(200).json(new OkResponse(naturalPerson));
@@ -47,7 +50,8 @@ exports.deleteNaturalPerson = async (req, res, next) => {
     const naturalPerson = await NaturalPerson.findByIdAndDelete(req.params.id);
 
     if(!naturalPerson){
-        return next(new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id), StatusCode.NOT_FOUND));
+        const response = new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id));
+        return res.status(StatusCode.NOT_FOUND).json(response);
     }
 
     res.status(200).json(new OkResponse(naturalPerson));

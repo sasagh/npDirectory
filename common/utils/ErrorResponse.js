@@ -1,7 +1,8 @@
-class ErrorResponse extends Error {
-    constructor(message, statusCode) {
-      super(message);
-      this.statusCode = statusCode;
+const Response = require('./Response');
+
+class ErrorResponse extends Response {
+    constructor(errorMessages) {
+      super(false, errorMessages);
   }
 }
   

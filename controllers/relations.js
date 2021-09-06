@@ -1,6 +1,6 @@
 const Relation = require('../models/Relation');
 const asyncHandler = require('../middleware/asyncHandler');
-const StatusCode = require('../common/constants/StatusCode');
+const StatusCode = require('../common/enum/StatusCode');
 const ErrorMessage = require('../common/messages/ErrorMessage');
 const ErrorResponse = require('../common/utils/ErrorResponse');
 const OkResponse = require('../common/utils/OkResponse');

@@ -16,7 +16,7 @@ app.use(express.json());
 app.use('/api/v1/naturalPersons', naturalPersons);
 app.use('/api/v1/relations', relations);
 
-app.use(errorHandler);
+//app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.NODE_ENV;

@@ -1,8 +1,8 @@
-class OkResponse {
+const Response = require('./Response');
+
+class OkResponse extends Response{
     constructor(data){
-        this.success = true,
-        this.count = data.length,
-        this.data = data
+        super(true, data);
     }
 }
 
