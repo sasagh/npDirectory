@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const StatusCode = require('../../common/enum/StatusCode');
 
-const validate = (req, res, next) => {
+const requestValidationErrorsHandler = (req, res, next) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty())
@@ -10,9 +10,9 @@ const validate = (req, res, next) => {
   const extractedErrors = []
   errors.array().map(err => extractedErrors.push(`${[err.param]}: ${err.msg}`))
 
-  return res.status(StatusCode.BAD_REQUEST).json({
+  return res.status(StatusCode.NOT_FOUND).json({
     errors: extractedErrors,
   })
 }
 
-module.exports = validate;
+module.exports = requestValidationErrorsHandler;

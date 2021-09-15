@@ -1,9 +1,8 @@
 const express = require('express');
 const {
-    createRelationRequestValidationRules,
-    updateRelationRequestValidationRules
-} = require('../middleware/requestValidator/rules/relationRequestValidationRules');
-const validate = require('../middleware/requestValidator/requestValidator');
+    createRelationRequestValidator,
+    updateRelationRequestValidator
+} = require('../middleware/requestValidation/requestValidators/relationRequestValidators');
 const {
     getRelations,
     createRelation,
@@ -16,12 +15,12 @@ const router = express.Router();
 router
     .route('/')
     .get(getRelations)
-    .post(createRelationRequestValidationRules(), validate, createRelation);
+    .post(createRelationRequestValidator, createRelation);
 
 router
     .route('/:id')
     .get(getRelationById)
-    .patch(updateRelationRequestValidationRules(), validate, updateRelation)
+    .patch(updateRelationRequestValidator, updateRelation)
     .delete(deleteRelation);
 
 module.exports = router;

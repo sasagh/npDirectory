@@ -32,8 +32,10 @@ exports.getNaturalPersonById = asyncHandler(async (req, res, next) => {
     res.status(200).json(new OkResponse(naturalPerson));
 });
 
-exports.updateNaturalPerson = async (req, res, next) => {
-    const naturalPerson = await NaturalPerson.findByIdAndUpdate(req.params.id, req.body, {
+exports.updateNaturalPerson = asyncHandler(async (req, res, next) => {
+    const id = req.params.id;
+
+    const naturalPerson = await NaturalPerson.findByIdAndUpdate(id, req.body, {
         new: true,
         runValidators: true
     });
@@ -44,10 +46,12 @@ exports.updateNaturalPerson = async (req, res, next) => {
     }
 
     res.status(200).json(new OkResponse(naturalPerson));
-}
+});
 
-exports.deleteNaturalPerson = async (req, res, next) => {
-    const naturalPerson = await NaturalPerson.findByIdAndDelete(req.params.id);
+exports.deleteNaturalPerson = asyncHandler(async (req, res, next) => {
+    const id = req.params.id;
+
+    const naturalPerson = await NaturalPerson.findByIdAndDelete(id);
 
     if(!naturalPerson){
         const response = new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id));
@@ -55,5 +59,5 @@ exports.deleteNaturalPerson = async (req, res, next) => {
     }
 
     res.status(200).json(new OkResponse(naturalPerson));
-}
+});
 

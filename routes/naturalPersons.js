@@ -1,9 +1,8 @@
 const express = require('express');
 const {
-    createNaturalPersonRequestValidationRules,
-    updateNaturalPersonRequestValidationRules,
-} = require('../middleware/requestValidator/rules/naturalPersonRequestValidationRules');
-const validate = require('../middleware/requestValidator/requestValidator');
+    createNaturalPersonRequestValidator,
+    updateNaturalPersonRequestValidator,
+} = require('../middleware/requestValidation/requestValidators/naturalPersonRequestValidators');
 const {
     getNaturalPersons,
     createNaturalPerson,
@@ -16,12 +15,12 @@ const router = express.Router();
 router
     .route('/')
     .get(getNaturalPersons)
-    .post(createNaturalPersonRequestValidationRules(), validate, createNaturalPerson);
+    .post(createNaturalPersonRequestValidator, createNaturalPerson);
 
 router
     .route('/:id')
     .get(getNaturalPersonById)
-    .patch(updateNaturalPersonRequestValidationRules(), validate, updateNaturalPerson)
+    .patch(updateNaturalPersonRequestValidator, updateNaturalPerson)
     .delete(deleteNaturalPerson);
 
 module.exports = router;

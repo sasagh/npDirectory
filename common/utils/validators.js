@@ -22,10 +22,10 @@ exports.validateName = (str) => {
     for(let i=1; i<str.length; i++){
         let c = str.charAt(i);
 
-        if(language == Language.ENGLISH && !isEnglishCharacter(c))
+        if(language === Language.ENGLISH && !isEnglishCharacter(c))
             return false;
 
-        if(language == Language.GEORGIAN && !isGeorgianCharacter(c))
+        if(language === Language.GEORGIAN && !isGeorgianCharacter(c))
             return false;
     }
 
@@ -66,7 +66,7 @@ exports.validateImage = (file) => {
     if(!file)
         return false
 
-    const fileType = file['type'];
+    const fileType = file['mimetype'];
 
     return Object.values(ImageType).includes(fileType);
 }
