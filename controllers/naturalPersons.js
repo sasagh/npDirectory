@@ -1,4 +1,5 @@
 const NaturalPerson = require('../models/NaturalPerson');
+const Relations = require('../models/Relation');
 const asyncHandler = require('../middleware/asyncHandler');
 const StatusCode = require('../common/enum/StatusCode');
 const ErrorMessage = require('../common/messages/ErrorMessage');
@@ -14,6 +15,16 @@ exports.getNaturalPersons = asyncHandler(async (req, res, next) => {
 });
 
 exports.createNaturalPerson = asyncHandler(async (req, res, next) => {
+    const passportNumber = req.body.passportNumber;
+
+    const naturalPersonWithSamePassportNumberExists =
+        await NaturalPerson.findOne({ passportNumber: passportNumber}) != null;
+
+    if(naturalPersonWithSamePassportNumberExists){
+        const response = new ErrorResponse(ErrorMessage.PASSPORT_NUMBER_EXISTS);
+        return res.status(StatusCode.BAD_REQUEST).json(response);
+    }
+
     const naturalPerson = await NaturalPerson.create(req.body);
 
     res.status(StatusCode.CREATE).json(new OkResponse(naturalPerson));
@@ -35,21 +46,38 @@ exports.getNaturalPersonById = asyncHandler(async (req, res, next) => {
 exports.updateNaturalPerson = asyncHandler(async (req, res, next) => {
     const id = req.params.id;
 
-    const naturalPerson = await NaturalPerson.findByIdAndUpdate(id, req.body, {
-        new: true,
-        runValidators: true
-    });
+    let naturalPerson = await NaturalPerson.findById(id);
 
     if(!naturalPerson){
         const response = new ErrorResponse(ErrorMessage.idNotFound(NATURAL_PERSON, id));
         return res.status(StatusCode.NOT_FOUND).json(response);
     }
 
+    const passportNumberHasChanged = req.body.passportNumber && req.body.passportNumber != naturalPerson.passportNumber;
+
+    if(passportNumberHasChanged){
+        const response = new ErrorResponse(ErrorMessage.CHANGED_PASSPORT_NUMBER);
+        return res.status(StatusCode.BAD_REQUEST).json(response);
+    }
+
+    naturalPerson = await NaturalPerson.findByIdAndUpdate(id, req.body, {
+        new: true,
+        runValidators: true
+    });
+
     res.status(200).json(new OkResponse(naturalPerson));
 });
 
 exports.deleteNaturalPerson = asyncHandler(async (req, res, next) => {
     const id = req.params.id;
+
+    const personRelationIds = await Relations.find({
+        $or:[
+            { from: id },
+            { to : id}
+        ]}, '_id');
+
+    await Relations.deleteMany({ _id : {$in : personRelationIds}});
 
     const naturalPerson = await NaturalPerson.findByIdAndDelete(id);
 

@@ -46,6 +46,6 @@ exports.createRelationRequestValidator = [
 ]
 
 exports.updateRelationRequestValidator = [
-    Array.from(checkerFunctions, el => el(true)),
+    [checkRelationType(false)],
     requestValidationErrorsHandler
 ]
